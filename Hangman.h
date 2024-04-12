@@ -4,12 +4,10 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 class Hangman {
 
     public:
-        //void read_list_of_words();
+        void read_list_of_words();
 
         void determine_secret_word();
 
@@ -23,26 +21,26 @@ class Hangman {
 
         bool check_progress();
 
-        bool check_solution_guess(string);
+        bool check_solution_guess(std::string);
 
-        string get_word_progress();
+        std::string get_word_progress();
 
     private:
-        string secret_word;
+        std::string secret_word;
 
-        string hangman_words_path = "../hangman_words.txt";
+        std::string hangman_words_path = "../hangman_words.txt";
 
-        const string full_alphabet = "abcdefghijklmnopqrstuvwxyz";
+        const std::string full_alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-        string guesses;
+        std::string guesses;
 
         int max_number_of_incorrect_guesses = 7;
 
         int current_number_of_incorrect_guesses;
 
-        //vector<string> list_of_words;
+        //std::vector<std::string> list_of_words;
 
-        vector<string> list_of_words = {
+        std::vector<std::string> list_of_words = {
             "abruptly",
             "absurd",
             "abyss",
