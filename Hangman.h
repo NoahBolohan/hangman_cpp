@@ -4,10 +4,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <pdcurses/curses.h>
 
 class Hangman {
 
     public:
+        Hangman(WINDOW*, WINDOW*, WINDOW*);
+
         void ReadWordsFromFile();
         void DetermineSecretWord();
         void ObtainUserGuess();
@@ -16,11 +19,14 @@ class Hangman {
         void PlayAgain();
 
         void DrawHangman();
-        void HeaderText();
-        void DisplayStage();
-        void PrintWAtCoord(std::string, std::string, bool = false);
-        void PrintWAtCoord(std::string, std::vector<int>, std::string, bool = false);
-        void PrintWSAAtCoord(std::string, std::vector<std::string>);
+        void WHeaderText();
+        void WDisplayStage();
+        void WPrintWAtCoord(WINDOW*, std::string, std::string, bool = false);
+        void WPrintWAtCoord(WINDOW*, std::string, std::vector<int>, std::string, bool = false);
+        void WPrintWSAAtCoord(WINDOW*, std::string, std::vector<std::string>);
+
+        void refresh_wins();
+        void refresh_wins(std::vector<WINDOW*>);
 
         bool CheckProgress();
         bool CheckSolutionGuess(std::string);
@@ -28,6 +34,10 @@ class Hangman {
         std::string GetAlphabetWithGuesses();
 
     private:
+        WINDOW* header_win;
+        WINDOW* stage_win;
+        WINDOW* text_win;
+
         std::string secret_word;
         std::string user_guess;
         std::string guesses;
@@ -37,9 +47,9 @@ class Hangman {
         std::string hangman_words_path = "./hangman_words_easy.txt";
         const std::string full_alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-        char play_again_input[10];
+        char play_again_input[10] = "y";
         
-        int current_number_of_incorrect_guesses;
+        int current_number_of_incorrect_guesses = 0;
         int max_number_of_incorrect_guesses = 7;
         
 
@@ -64,13 +74,15 @@ class Hangman {
         };
 
         std::map < std::string, std::vector<int> > coords = {
-            {"secret_word", {8, 19}},
-            {"remaining_letters", {10, 19}},
-            {"guess_text", {12, 19}},
-            {"empty_stage", {8, 3}},
-            {"hangman_head", {10, 4}},
-            {"header_text", {0, 0}},
-            {"play_again", {14, 19}}
+            {"header_text", {1, 1}},
+
+            {"secret_word", {1,2}},
+            {"remaining_letters", {3,2}},
+            {"guess_text", {5,2}},
+            {"play_again", {7,2}},
+
+            {"empty_stage", {1,3}},
+            {"hangman_head", {3,4}}
         };
         
 };

@@ -11,4 +11,6 @@ void destroy_win(WINDOW*);
 
 void mvprintw_sa(int, int, std::vector<std::string>);
 
+void mvwprintw_sa(WINDOW*, int, int, std::vector<std::string>);
+
 #endif

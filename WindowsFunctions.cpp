@@ -28,3 +28,12 @@ void mvprintw_sa(int y, int x, std::vector<std::string> texts)
 		i++;
 	}
 }
+
+void mvwprintw_sa(WINDOW* window, int y, int x, std::vector<std::string> texts)
+{
+	int i = 0;
+	for (const std::string& text : texts) {
+		mvwprintw(window, y + i, x, text.c_str());
+		i++;
+	}
+}

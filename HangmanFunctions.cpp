@@ -4,6 +4,12 @@
 #include "Windows.h"
 #include "Hangman.h"
 
+Hangman::Hangman(WINDOW* header_win_arg, WINDOW* stage_win_arg, WINDOW* text_win_arg) {
+    header_win = header_win_arg;
+    stage_win = stage_win_arg;
+    text_win = text_win_arg;
+}
+
 void Hangman::ReadWordsFromFile() {
     try {
         std::ifstream file;
@@ -20,7 +26,8 @@ void Hangman::ReadWordsFromFile() {
         file.close();
     }
     catch (std::exception& e) {
-        PrintWAtCoord("guess_text", e.what(), true);
+        WPrintWAtCoord(text_win, "guess_text", e.what(), true);
+        refresh_wins({ text_win });
         getch();
     }
 }
@@ -35,15 +42,17 @@ void Hangman::ObtainUserGuess() {
     char user_guess_ca[10];
     bool successful_guess = false;
 
-    PrintWAtCoord("guess_text", "Guess a letter (or enter \"guess\" to guess the word)!: ", true);
+    WPrintWAtCoord(text_win, "guess_text", "Guess a letter (or enter \"guess\" to guess the word)!: ", true);
+    refresh_wins({ text_win });
 
     while (!successful_guess) {
-        getstr(user_guess_ca);
+        wgetstr(text_win, user_guess_ca);
         std::string user_guess = std::string(user_guess_ca);
         
         if (user_guess == "guess") {
-            PrintWAtCoord("guess_text", "Enter your guess: ", true);
-            getstr(user_guess_ca);
+            WPrintWAtCoord(text_win, "guess_text", "Enter your guess: ", true);
+            refresh_wins({ text_win });
+            wgetstr(text_win, user_guess_ca);
             std::string user_guess = std::string(user_guess_ca);
 
             if (Hangman::CheckSolutionGuess(user_guess)) {
@@ -54,14 +63,17 @@ void Hangman::ObtainUserGuess() {
 
         else {
             if (user_guess.size() != 1) {
-                PrintWAtCoord("guess_text", "Your guess is too long! Try a single character: ", true);
+                WPrintWAtCoord(text_win, "guess_text", "Your guess is too long! Try a single character: ", true);
+                refresh_wins({ text_win });
             }
             else {
                 if (full_alphabet.find(user_guess) == std::string::npos) {
-                    PrintWAtCoord("guess_text", "Your guess isn't a letter of the alphabet! Try again: ", true);
+                    WPrintWAtCoord(text_win, "guess_text", "Your guess isn't a letter of the alphabet! Try again: ", true);
+                    refresh_wins({ text_win });
                 }
                 else if (guesses.find(user_guess) != std::string::npos) {
-                    PrintWAtCoord("guess_text", "You already guessed that! Try again: ", true);
+                    WPrintWAtCoord(text_win, "guess_text", "You already guessed that! Try again: ", true);
+                    refresh_wins({ text_win });
                 }
                 else {
 
@@ -84,7 +96,8 @@ bool Hangman::CheckSolutionGuess(std::string user_guess) {
     }
     else {
         ++current_number_of_incorrect_guesses;
-        PrintWAtCoord("guess_text", "Incorrect guess! The secret word is not \"" + user_guess + "\".", true);
+        WPrintWAtCoord(text_win, "guess_text", "Incorrect guess! The secret word is not \"" + user_guess + "\".", true);
+        refresh_wins({ text_win });
         return false;
     }
 }
@@ -142,34 +155,34 @@ bool Hangman::CheckProgress() {
 void Hangman::Start() {
 
     while (play_again == "y") {
-        PrintWAtCoord("play_again", "", true);
+        WPrintWAtCoord(text_win, "play_again", "", true);
         Reset();
         ReadWordsFromFile();
         DetermineSecretWord();
 
-        word_progress = "";
-        word_progress_concact = "";
-
         while (current_number_of_incorrect_guesses < max_number_of_incorrect_guesses) {
 
             DrawHangman();
-            PrintWAtCoord("secret_word", "Secret word progress: " + GetWordProgress());
-            PrintWAtCoord("remaining_letters", "Remaining letters: " + GetAlphabetWithGuesses());
+            WPrintWAtCoord(text_win, "secret_word", "Secret word progress: " + GetWordProgress());
+            WPrintWAtCoord(text_win, "remaining_letters", "Remaining letters: " + GetAlphabetWithGuesses());
 
-            refresh();
+            refresh_wins();
 
             ObtainUserGuess();
 
             if (CheckProgress()) {
-                PrintWAtCoord("secret_word", "Secret word progress: " + GetWordProgress());
-                PrintWAtCoord("guess_text", "You win! Woo-hoo! The word was: " + secret_word, true);
+                WPrintWAtCoord(text_win, "secret_word", "Secret word progress: " + GetWordProgress());
+                WPrintWAtCoord(text_win, "guess_text", "You win! Woo-hoo! The word was: " + secret_word, true);
+
+                refresh_wins({ text_win });
                 break;
             }
         }
 
         if (current_number_of_incorrect_guesses >= max_number_of_incorrect_guesses) {
             DrawHangman();
-            PrintWAtCoord("guess_text", "Better luck next time! The secret word was \"" + secret_word + ".\"", true);
+            WPrintWAtCoord(text_win, "guess_text", "Better luck next time! The secret word was \"" + secret_word + ".\"", true);
+            refresh_wins();
         }
 
         PlayAgain();
@@ -180,12 +193,14 @@ void Hangman::Reset() {
 
     guesses = "";
     current_number_of_incorrect_guesses = 0;
+    word_progress = "";
+    word_progress_concact = "";
 }
 
 void Hangman::PlayAgain() {
 
-    PrintWAtCoord("play_again", "Would you like to play again? (y\\n): ");
-    getstr(play_again_input);
+    WPrintWAtCoord(text_win, "play_again", "Would you like to play again? (y\\n): ");
+    wgetstr(text_win, play_again_input);
 
     play_again = std::string(play_again_input);
 }
