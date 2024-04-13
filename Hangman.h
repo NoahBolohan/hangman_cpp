@@ -27,6 +27,7 @@ class Hangman {
 
         void refresh_wins();
         void refresh_wins(std::vector<WINDOW*>);
+        void reset_win(WINDOW*);
 
         bool CheckProgress();
         bool CheckSolutionGuess(std::string);

@@ -39,7 +39,7 @@ void Hangman::DetermineSecretWord() {
 
 void Hangman::ObtainUserGuess() {
 
-    char user_guess_ca[10];
+    char user_guess_ca[80];
     bool successful_guess = false;
 
     WPrintWAtCoord(text_win, "guess_text", "Guess a letter (or enter \"guess\" to guess the word)!: ", true);
@@ -153,12 +153,15 @@ bool Hangman::CheckProgress() {
 }
 
 void Hangman::Start() {
+    WHeaderText();
+    WDisplayStage();
 
     while (play_again == "y") {
         WPrintWAtCoord(text_win, "play_again", "", true);
         Reset();
         ReadWordsFromFile();
         DetermineSecretWord();
+        WDisplayStage();
 
         while (current_number_of_incorrect_guesses < max_number_of_incorrect_guesses) {
 
@@ -195,6 +198,7 @@ void Hangman::Reset() {
     current_number_of_incorrect_guesses = 0;
     word_progress = "";
     word_progress_concact = "";
+    reset_win(stage_win);
 }
 
 void Hangman::PlayAgain() {

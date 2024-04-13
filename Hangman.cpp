@@ -16,9 +16,6 @@ int main(int argc, char* argv[])
 	
 	Hangman hangman(header_win, stage_win, text_win);
 
-	hangman.WHeaderText();
-	hangman.WDisplayStage();
-
 	hangman.Start();
 
 	return 0;
