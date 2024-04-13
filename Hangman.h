@@ -3,258 +3,76 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class Hangman {
 
     public:
-        void read_list_of_words();
+        void ReadWordsFromFile();
+        void DetermineSecretWord();
+        void ObtainUserGuess();
+        void Start();
+        void Reset();
+        void PlayAgain();
 
-        void determine_secret_word();
+        void DrawHangman();
+        void HeaderText();
+        void DisplayStage();
+        void PrintWAtCoord(std::string, std::string, bool = false);
+        void PrintWAtCoord(std::string, std::vector<int>, std::string, bool = false);
+        void PrintWSAAtCoord(std::string, std::vector<std::string>);
 
-        void obtain_user_guess();
-
-        void start_game();
-
-        void reset_game();
-
-        void draw_hangman();
-
-        bool check_progress();
-
-        bool check_solution_guess(std::string);
-
-        std::string get_word_progress();
+        bool CheckProgress();
+        bool CheckSolutionGuess(std::string);
+        std::string GetWordProgress();
+        std::string GetAlphabetWithGuesses();
 
     private:
         std::string secret_word;
-
-        std::string hangman_words_path = "../hangman_words.txt";
-
+        std::string user_guess;
+        std::string guesses;
+        std::string word_progress;
+        std::string word_progress_concact;
+        std::string play_again= "y";
+        std::string hangman_words_path = "./hangman_words_easy.txt";
         const std::string full_alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-        std::string guesses;
-
-        int max_number_of_incorrect_guesses = 7;
-
+        char play_again_input[10];
+        
         int current_number_of_incorrect_guesses;
+        int max_number_of_incorrect_guesses = 7;
+        
 
-        //std::vector<std::string> list_of_words;
-
-        std::vector<std::string> list_of_words = {
-            "abruptly",
-            "absurd",
-            "abyss",
-            "affix",
-            "askew",
-            "avenue",
-            "awkward",
-            "axiom",
-            "azure",
-            "bagpipes",
-            "bandwagon",
-            "banjo",
-            "bayou",
-            "beekeeper",
-            "bikini",
-            "blitz",
-            "blizzard",
-            "boggle",
-            "bookworm",
-            "boxcar",
-            "boxful",
-            "buckaroo",
-            "buffalo",
-            "buffoon",
-            "buxom",
-            "buzzard",
-            "buzzing",
-            "buzzwords",
-            "caliph",
-            "cobweb",
-            "cockiness",
-            "croquet",
-            "crypt",
-            "curacao",
-            "cycle",
-            "daiquiri",
-            "dirndl",
-            "disavow",
-            "dizzying",
-            "duplex",
-            "dwarves",
-            "embezzle",
-            "equip",
-            "espionage",
-            "euouae",
-            "exodus",
-            "faking",
-            "fishhook",
-            "fixable",
-            "fjord",
-            "flapjack",
-            "flopping",
-            "fluffiness",
-            "flyby",
-            "foxglove",
-            "frazzled",
-            "frizzled",
-            "fuchsia",
-            "funny",
-            "gabby",
-            "galaxy",
-            "galvanize",
-            "gazebo",
-            "giaour",
-            "gizmo",
-            "glowworm",
-            "glyph",
-            "gnarly",
-            "gnostic",
-            "gossip",
-            "grogginess",
-            "haiku",
-            "haphazard",
-            "hyphen",
-            "iatrogenic",
-            "icebox",
-            "injury",
-            "ivory",
-            "ivy",
-            "jackpot",
-            "jaundice",
-            "jawbreaker",
-            "jaywalk",
-            "jazziest",
-            "jazzy",
-            "jelly",
-            "jigsaw",
-            "jinx",
-            "jiujitsu",
-            "jockey",
-            "jogging",
-            "joking",
-            "jovial",
-            "joyful",
-            "juicy",
-            "jukebox",
-            "jumbo",
-            "kayak",
-            "kazoo",
-            "keyhole",
-            "khaki",
-            "kilobyte",
-            "kiosk",
-            "kitsch",
-            "kiwifruit",
-            "klutz",
-            "knapsack",
-            "larynx",
-            "lengths",
-            "lucky",
-            "luxury",
-            "lymph",
-            "marquis",
-            "matrix",
-            "megahertz",
-            "microwave",
-            "mnemonic",
-            "mystify",
-            "naphtha",
-            "nightclub",
-            "nowadays",
-            "numbskull",
-            "nymph",
-            "onyx",
-            "ovary",
-            "oxidize",
-            "oxygen",
-            "pajama",
-            "peekaboo",
-            "phlegm",
-            "pixel",
-            "pizazz",
-            "pneumonia",
-            "polka",
-            "pshaw",
-            "psyche",
-            "puppy",
-            "puzzling",
-            "quartz",
-            "queue",
-            "quips",
-            "quixotic",
-            "quiz",
-            "quizzes",
-            "quorum",
-            "razzmatazz",
-            "rhubarb",
-            "rhythm",
-            "rickshaw",
-            "schnapps",
-            "scratch",
-            "shiv",
-            "snazzy",
-            "sphinx",
-            "spritz",
-            "squawk",
-            "staff",
-            "strength",
-            "strengths",
-            "stretch",
-            "stronghold",
-            "stymied",
-            "subway",
-            "swivel",
-            "syndrome",
-            "thriftless",
-            "thumbscrew",
-            "topaz",
-            "transcript",
-            "transgress",
-            "transplant",
-            "triphthong",
-            "twelfth",
-            "twelfths",
-            "unknown",
-            "unworthy",
-            "unzip",
-            "uptown",
-            "vaporize",
-            "vixen",
-            "vodka",
-            "voodoo",
-            "vortex",
-            "voyeurism",
-            "walkway",
-            "waltz",
-            "wave",
-            "wavy",
-            "waxy",
-            "wellspring",
-            "wheezy",
-            "whiskey",
-            "whizzing",
-            "whomever",
-            "wimpy",
-            "witchcraft",
-            "wizard",
-            "woozy",
-            "wristwatch",
-            "wyvern",
-            "xylophone",
-            "yachtsman",
-            "yippee",
-            "yoked",
-            "youthful",
-            "yummy",
-            "zephyr",
-            "zigzag",
-            "zigzagging",
-            "zilch",
-            "zipper",
-            "zodiac",
-            "zombi"
+        std::vector<std::string> list_of_words;
+        std::vector<std::string> empty_stage = {
+             "  _____ ",
+             " |    | ",
+             "      | ",
+             "      | ",
+             "      | ",
+             "      | ",
+             "______|_"
         };
+
+        std::vector<std::string> header_text = {
+            "Welcome to Hangman!",
+            "",
+            "Rules:",
+            "------",
+            "1. Guess one letter of the alphabet at a time.",
+            "2. If you want to guess the solution, input the word 'guess'."
+        };
+
+        std::map < std::string, std::vector<int> > coords = {
+            {"secret_word", {8, 19}},
+            {"remaining_letters", {10, 19}},
+            {"guess_text", {12, 19}},
+            {"empty_stage", {8, 3}},
+            {"hangman_head", {10, 4}},
+            {"header_text", {0, 0}},
+            {"play_again", {14, 19}}
+        };
+        
 };
 
 #endif

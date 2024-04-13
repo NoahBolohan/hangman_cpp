@@ -1,0 +1,10 @@
+apple
+banana
+clementine
+durian
+egg
+fries
+gourd
+hamburger
+ice
+juice
