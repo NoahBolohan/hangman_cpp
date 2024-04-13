@@ -5,7 +5,8 @@
 #include <vector>
 #include <pdcurses/curses.h>
 
-WINDOW* create_newwin(int, int, int, int);
+WINDOW* create_newwin(std::vector<int>);
+WINDOW* create_newwin_border(std::vector<int>);
 
 void destroy_win(WINDOW*);
 

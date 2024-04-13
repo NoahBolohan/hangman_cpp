@@ -10,6 +10,7 @@ class Hangman {
 
     public:
         Hangman(WINDOW*, WINDOW*, WINDOW*);
+        Hangman(std::map<std::string, std::vector<int>>);
 
         void ReadWordsFromFile();
         void DetermineSecretWord();
@@ -35,6 +36,10 @@ class Hangman {
         std::string GetAlphabetWithGuesses();
 
     private:
+        WINDOW* header_border_win;
+        WINDOW* stage_border_win;
+        WINDOW* text_border_win;
+
         WINDOW* header_win;
         WINDOW* stage_win;
         WINDOW* text_win;
@@ -75,15 +80,15 @@ class Hangman {
         };
 
         std::map < std::string, std::vector<int> > coords = {
-            {"header_text", {1, 1}},
+            {"header_text", {0, 0}},
 
-            {"secret_word", {1,2}},
-            {"remaining_letters", {3,2}},
-            {"guess_text", {5,2}},
-            {"play_again", {7,2}},
+            {"secret_word", {0,1}},
+            {"remaining_letters", {2,1}},
+            {"guess_text", {4,1}},
+            {"play_again", {6,1}},
 
-            {"empty_stage", {1,3}},
-            {"hangman_head", {3,4}}
+            {"empty_stage", {0,2}},
+            {"hangman_head", {2,3}}
         };
         
 };

@@ -4,10 +4,22 @@
 #include "Windows.h"
 #include "Hangman.h"
 
-Hangman::Hangman(WINDOW* header_win_arg, WINDOW* stage_win_arg, WINDOW* text_win_arg) {
-    header_win = header_win_arg;
-    stage_win = stage_win_arg;
-    text_win = text_win_arg;
+//Hangman::Hangman(WINDOW* header_win_arg, WINDOW* stage_win_arg, WINDOW* text_win_arg) {
+//    header_win = header_win_arg;
+//    stage_win = stage_win_arg;
+//    text_win = text_win_arg;
+//}
+
+Hangman::Hangman(std::map<std::string, std::vector<int>> window_dims) {
+    initscr();
+
+    header_border_win = create_newwin_border(window_dims["header"]);
+    stage_border_win = create_newwin_border(window_dims["stage"]);
+    text_border_win = create_newwin_border(window_dims["text"]);
+
+    header_win = create_newwin(window_dims["header"]);
+    stage_win = create_newwin(window_dims["stage"]);
+    text_win = create_newwin(window_dims["text"]);
 }
 
 void Hangman::ReadWordsFromFile() {
@@ -157,11 +169,9 @@ void Hangman::Start() {
     WDisplayStage();
 
     while (play_again == "y") {
-        WPrintWAtCoord(text_win, "play_again", "", true);
         Reset();
         ReadWordsFromFile();
         DetermineSecretWord();
-        WDisplayStage();
 
         while (current_number_of_incorrect_guesses < max_number_of_incorrect_guesses) {
 
@@ -199,6 +209,8 @@ void Hangman::Reset() {
     word_progress = "";
     word_progress_concact = "";
     reset_win(stage_win);
+    reset_win(text_win);
+    WDisplayStage();
 }
 
 void Hangman::PlayAgain() {

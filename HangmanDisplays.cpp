@@ -136,6 +136,5 @@ void Hangman::refresh_wins(std::vector<WINDOW*> wins_to_refresh) {
 
 void Hangman::reset_win(WINDOW* window) {
 	werase(window);
-	wborder(window, '|', '|', '-', '-', '*', '+', '+', '+');
 	wrefresh(window);
 }

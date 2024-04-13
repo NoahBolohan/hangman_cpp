@@ -3,8 +3,27 @@
 #include "Windows.h"
 #include <pdcurses/curses.h>
 
-WINDOW* create_newwin(int height, int width, int starty, int startx)
+WINDOW* create_newwin(std::vector<int> window_dims)
 {
+	int height = window_dims.at(0) - 2;
+	int width = window_dims.at(1) - 2;
+	int starty = window_dims.at(2)+1;
+	int startx = window_dims.at(3)+1;
+
+	WINDOW* local_win;
+
+	local_win = newwin(height, width, starty, startx);
+	wrefresh(local_win);
+	return local_win;
+}
+
+WINDOW* create_newwin_border(std::vector<int> window_dims)
+{
+	int height = window_dims.at(0);
+	int width = window_dims.at(1);
+	int starty = window_dims.at(2);
+	int startx = window_dims.at(3);
+
 	WINDOW* local_win;
 
 	local_win = newwin(height, width, starty, startx);
